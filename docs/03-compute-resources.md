@@ -50,6 +50,8 @@ controller-2              running (virtualbox)
 worker-0                  running (virtualbox)
 worker-1                  running (virtualbox)
 worker-2                  running (virtualbox)
+worker-3                  running (virtualbox)
+worker-4                  running (virtualbox)
 ```
 
 ## Kubernetes Master VIP
