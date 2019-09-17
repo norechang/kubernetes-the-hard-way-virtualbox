@@ -57,16 +57,16 @@ Vagrant 创建虚拟机时会执行部署脚本`heartbeat.sh`，用 heartbeat �
 
 ### 验证
 ```
-ping -c 1 192.168.100.100
+ping -c 1 10.240.0.100
 ```
 
 > output
 
 ```
-PING 192.168.100.100 (192.168.100.100): 56 data bytes
-64 bytes from 192.168.100.100: icmp_seq=0 ttl=64 time=0.438 ms
+PING 10.240.0.100 (10.240.0.100): 56 data bytes
+64 bytes from 10.240.0.100: icmp_seq=0 ttl=64 time=0.438 ms
 
---- 192.168.100.100 ping statistics ---
+--- 10.240.0.100ping statistics ---
 1 packets transmitted, 1 packets received, 0.0% packet loss
 round-trip min/avg/max/stddev = 0.438/0.438/0.438/0.000 ms
 ```
