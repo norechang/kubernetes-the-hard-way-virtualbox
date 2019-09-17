@@ -11,16 +11,16 @@ deadtime 30
 initdead 120
 udpport 694
 auto_failback off
-ucast $(ip -4 --oneline addr | grep '192\.168\.100\.' | cut -d' ' -f2) 192.168.100.10
-ucast $(ip -4 --oneline addr | grep '192\.168\.100\.' | cut -d' ' -f2) 192.168.100.11
-ucast $(ip -4 --oneline addr | grep '192\.168\.100\.' | cut -d' ' -f2) 192.168.100.12
+ucast $(ip -4 --oneline addr | grep '10\.240\.0\.' | cut -d' ' -f2) 10.240.0.10
+ucast $(ip -4 --oneline addr | grep '10\.240\.0\.' | cut -d' ' -f2) 10.240.0.11
+ucast $(ip -4 --oneline addr | grep '10\.240\.0\.' | cut -d' ' -f2) 10.240.0.12
 node    controller-0
 node    controller-1
 node    controller-2
 EOF
 
 cat >/etc/ha.d/haresources <<EOF
-controller-0 IPaddr::192.168.100.100/24/$(ip -4 --oneline addr | grep '192\.168\.100\.' | cut -d' ' -f2)
+controller-0 IPaddr::10.240.0.100/24/$(ip -4 --oneline addr | grep '10\.240\.0\.' | cut -d' ' -f2)
 EOF
 
 cat >/etc/ha.d/authkeys <<EOF
