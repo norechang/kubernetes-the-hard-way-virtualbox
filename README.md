@@ -15,11 +15,13 @@ The target audience for this tutorial is someone planning to support a productio
 ## Cluster Details
 
 Kubernetes The Hard Way guides you through bootstrapping a highly available Kubernetes cluster with end-to-end encryption between components and RBAC authentication.
+** Refresh from original branch
 
-* [Kubernetes](https://github.com/kubernetes/kubernetes) 1.8.0
-* [cri-containerd Container Runtime](https://github.com/kubernetes-incubator/cri-containerd) 1.0.0-alpha.0
-* [CNI Container Networking](https://github.com/containernetworking/cni) 0.6.0
-* [etcd](https://github.com/coreos/etcd) 3.2.8
+* [Kubernetes](https://github.com/kubernetes/kubernetes) 1.15.3
+* [containerd](https://github.com/containerd/containerd) 1.2.9
+* [coredns](https://github.com/coredns/coredns) v1.6.3
+* [cni](https://github.com/containernetworking/cni) v0.7.1
+* [etcd](https://github.com/coreos/etcd) v3.4.0
 
 ## Labs
 
