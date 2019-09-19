@@ -66,46 +66,6 @@ Install the worker binaries:
 }
 ```
 
-### Configure CNI Networking
-
-Set fixed pod_cidr:
-
-```
-POD_CIDR="192.168.100.0/16"
-```
-Create the `bridge` network configuration file:
-
-```
-cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
-{
-    "cniVersion": "0.3.1",
-    "name": "bridge",
-    "type": "bridge",
-    "bridge": "cnio0",
-    "isGateway": true,
-    "ipMasq": true,
-    "ipam": {
-        "type": "host-local",
-        "ranges": [
-          [{"subnet": "${POD_CIDR}"}]
-        ],
-        "routes": [{"dst": "0.0.0.0/0"}]
-    }
-}
-EOF
-```
-
-Create the `loopback` network configuration file:
-
-```
-cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
-{
-    "cniVersion": "0.3.1",
-    "name": "lo",
-    "type": "loopback"
-}
-EOF
-```
 ### Configure containerd
 
 Create the `containerd` configuration file:
@@ -117,6 +77,8 @@ sudo mkdir -p /etc/containerd/
 ```
 cat << EOF | sudo tee /etc/containerd/config.toml
 [plugins]
+  [plugins.cri]
+    stream_server_address=${INTERNAL_IP}
   [plugins.cri.containerd]
     snapshotter = "overlayfs"
     [plugins.cri.containerd.default_runtime]
@@ -181,7 +143,6 @@ authorization:
 clusterDomain: "cluster.local"
 clusterDNS:
   - "10.32.0.10"
-podCIDR: "${POD_CIDR}"
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
 tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
@@ -210,7 +171,8 @@ ExecStart=/usr/local/bin/kubelet \\
   --kubeconfig=/var/lib/kubelet/kubeconfig \\
   --network-plugin=cni \\
   --register-node=true \\
-  --v=2
+  --v=2 \\
+  --node-ip=${INTERNAL_IP}
 Restart=on-failure
 RestartSec=5
 
