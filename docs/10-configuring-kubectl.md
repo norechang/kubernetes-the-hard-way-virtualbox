@@ -17,26 +17,26 @@ KUBERNETES_PUBLIC_ADDRESS="192.168.100.100"
 Generate a kubeconfig file suitable for authenticating as the `admin` user:
 
 ```
-kubectl config set-cluster kubernetes-the-hard-way \
-  --certificate-authority=ca.pem \
-  --embed-certs=true \
-  --server=https://${KUBERNETES_PUBLIC_ADDRESS}:6443
-```
+{
+  KUBERNETES_PUBLIC_ADDRESS=$(gcloud compute addresses describe kubernetes-the-hard-way \
+    --region $(gcloud config get-value compute/region) \
+    --format 'value(address)')
 
-```
-kubectl config set-credentials admin \
-  --client-certificate=admin.pem \
-  --client-key=admin-key.pem
-```
+  kubectl config set-cluster kubernetes-the-hard-way \
+    --certificate-authority=ca.pem \
+    --embed-certs=true \
+    --server=https://${KUBERNETES_PUBLIC_ADDRESS}:6443
 
-```
-kubectl config set-context kubernetes-the-hard-way \
-  --cluster=kubernetes-the-hard-way \
-  --user=admin
-```
+  kubectl config set-credentials admin \
+    --client-certificate=admin.pem \
+    --client-key=admin-key.pem
 
-```
-kubectl config use-context kubernetes-the-hard-way
+  kubectl config set-context kubernetes-the-hard-way \
+    --cluster=kubernetes-the-hard-way \
+    --user=admin
+
+  kubectl config use-context kubernetes-the-hard-way
+}
 ```
 
 ## Verification
@@ -67,10 +67,12 @@ kubectl get nodes
 > output
 
 ```
-NAME       STATUS     ROLES     AGE       VERSION
-worker-0   NotReady   <none>    2m        v1.8.0
-worker-1   NotReady   <none>    2m        v1.8.0
-worker-2   NotReady   <none>    2m        v1.8.0
+NAME       STATUS   ROLES    AGE    VERSION
+worker-0   Ready    <none>   2m9s   v1.15.3
+worker-1   Ready    <none>   2m9s   v1.15.3
+worker-2   Ready    <none>   2m9s   v1.15.3
+worker-3   Ready    <none>   2m9s   v1.15.3
+worker-4   Ready    <none>   2m9s   v1.15.3
 ```
 
 Next: [Provisioning Pod Network Routes](11-pod-network-routes.md)
