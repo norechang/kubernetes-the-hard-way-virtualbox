@@ -58,7 +58,7 @@ worker-4                  running (virtualbox)
 ## Kubernetes Master VIP
 Adopting `heatbeat` service to establish a VIP: "10.240.0.100" as the entrance to the controller cluster.
 
-### 验证
+### Verify
 ```
 ping -c 1 10.240.0.100
 ```
