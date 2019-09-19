@@ -65,6 +65,48 @@ Install the worker binaries:
   sudo cp containerd/bin/* /bin/
 }
 ```
+
+### Configure CNI Networking
+
+Retrieve the Pod CIDR range for the current compute instance:
+
+```
+POD_CIDR=""10.200.0.0/16""
+```
+
+Create the `bridge` network configuration file:
+
+```
+cat <<EOF | sudo tee /etc/cni/net.d/10-bridge.conf
+{
+    "cniVersion": "0.3.1",
+    "name": "bridge",
+    "type": "bridge",
+    "bridge": "cnio0",
+    "isGateway": true,
+    "ipMasq": true,
+    "ipam": {
+        "type": "host-local",
+        "ranges": [
+          [{"subnet": "${POD_CIDR}"}]
+        ],
+        "routes": [{"dst": "0.0.0.0/0"}]
+    }
+}
+EOF
+```
+
+Create the `loopback` network configuration file:
+
+```
+cat <<EOF | sudo tee /etc/cni/net.d/99-loopback.conf
+{
+    "cniVersion": "0.3.1",
+    "name": "lo",
+    "type": "loopback"
+}
+EOF
+```
 ### Get woker internal ip
 
 ```
@@ -148,6 +190,7 @@ authorization:
 clusterDomain: "cluster.local"
 clusterDNS:
   - "10.32.0.10"
+podCIDR: "${POD_CIDR}"  
 resolvConf: "/run/systemd/resolve/resolv.conf"
 runtimeRequestTimeout: "15m"
 tlsCertFile: "/var/lib/kubelet/${HOSTNAME}.pem"
