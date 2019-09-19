@@ -83,7 +83,7 @@ sudo mkdir -p /etc/containerd/
 cat << EOF | sudo tee /etc/containerd/config.toml
 [plugins]
   [plugins.cri]
-    stream_server_address=${INTERNAL_IP}
+    stream_server_address = "${INTERNAL_IP}"
   [plugins.cri.containerd]
     snapshotter = "overlayfs"
     [plugins.cri.containerd.default_runtime]
