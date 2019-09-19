@@ -152,7 +152,7 @@ Copy the `kube-scheduler` kubeconfig into place:
 Create the `kube-scheduler.yaml` configuration file:
 
 ```
-mkdir -p /etc/kubernetes/config/
+sudo mkdir -p /etc/kubernetes/config/
 ```
 ```
 cat <<EOF | sudo tee /etc/kubernetes/config/kube-scheduler.yaml
