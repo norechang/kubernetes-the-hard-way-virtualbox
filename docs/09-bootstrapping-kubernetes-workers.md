@@ -65,6 +65,11 @@ Install the worker binaries:
   sudo mv containerd/bin/* /bin/
 }
 ```
+### Get woker internal ip
+
+```
+INTERNAL_IP=$(ip -4 --oneline addr | grep -v secondary | grep -oP '(10\.240\.0\.[0-9]{1,3})(?=/)')
+```
 
 ### Configure containerd
 
