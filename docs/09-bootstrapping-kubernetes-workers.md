@@ -71,7 +71,7 @@ Install the worker binaries:
 Retrieve the Pod CIDR range for the current compute instance:
 
 ```
-POD_CIDR=""10.200.0.0/16""
+POD_CIDR="10.200.0.0/16"
 ```
 
 Create the `bridge` network configuration file:
