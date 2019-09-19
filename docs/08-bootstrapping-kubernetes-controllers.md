@@ -146,7 +146,7 @@ Copy the `kube-scheduler` kubeconfig into place:
 ```
 {
   cd /vagrant
-  sudo mv kube-scheduler.kubeconfig /var/lib/kubernetes/
+  sudo cp kube-scheduler.kubeconfig /var/lib/kubernetes/
 }
 ```
 Create the `kube-scheduler.yaml` configuration file:
