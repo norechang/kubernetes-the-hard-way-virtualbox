@@ -1,3 +1,5 @@
+# !!! STILL WORKING IN PROGRESS !!!
+
 # Kubernetes The Hard Way
 
 > "Kubernetes The Hard Way" is a wonderful tutorial for setting up Kubernetes step by step. But [Google Cloud Platform](https://cloud.google.com/) is somehow not convenient for me, so I use VirtualBox to provision compute resources. The major differences between GCP and VirtualBox come with the networking, and could be fixed easily. Everything else keeps the same with origin.
