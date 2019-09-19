@@ -50,7 +50,7 @@ Install the Kubernetes binaries:
 The instance internal IP address will be used advertise the API Server to members of the cluster. Retrieve the internal IP address for the current compute instance:
 
 ```
-INTERNAL_IP=$(ip -4 --oneline addr | grep -v secondary | grep -oP '(192\.168\.100\.[0-9]{1,3})(?=/)')
+INTERNAL_IP=$(ip -4 --oneline addr | grep -v secondary | grep -oP '(10\.240\.0\.[0-9]{1,3})(?=/)')
 ```
 
 Create the `kube-apiserver.service` systemd unit file:
