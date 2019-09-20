@@ -83,20 +83,20 @@ POD_NAME=$(kubectl get pods -l app=nginx -o jsonpath="{.items[0].metadata.name}"
 Forward port `8080` on your local machine to port `80` of the `nginx` pod:
 
 ```
-kubectl port-forward $POD_NAME 8080:80
+kubectl port-forward $POD_NAME 9090:80
 ```
 
 > output
 
 ```
-Forwarding from 127.0.0.1:8080 -> 80
-Forwarding from [::1]:8080 -> 80
+Forwarding from 127.0.0.1:9090 -> 80
+Forwarding from [::1]:9090 -> 80
 ```
 
 In a new terminal make an HTTP request using the forwarding address:
 
 ```
-curl --head http://127.0.0.1:8080
+curl --head http://127.0.0.1:9090
 ```
 
 > output
@@ -116,9 +116,9 @@ Accept-Ranges: bytes
 Switch back to the previous terminal and stop the port forwarding to the `nginx` pod:
 
 ```
-Forwarding from 127.0.0.1:8080 -> 80
-Forwarding from [::1]:8080 -> 80
-Handling connection for 8080
+Forwarding from 127.0.0.1:9090 -> 80
+Forwarding from [::1]:9090 -> 80
+Handling connection for 9090
 ^C
 ```
 
