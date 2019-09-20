@@ -295,6 +295,9 @@ vagrant ssh controller-0
 List the registered Kubernetes nodes:
 
 ```
+cd /vagrant
+```
+```
 kubectl get nodes --kubeconfig admin.kubeconfig
 ```
 
