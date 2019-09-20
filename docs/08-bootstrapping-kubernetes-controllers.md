@@ -178,6 +178,8 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 ExecStart=/usr/local/bin/kube-scheduler \\
   --config=/etc/kubernetes/config/kube-scheduler.yaml \\
+  --leader-elect=true \\
+  --master=http://127.0.0.1:8080 \\  
   --v=2
 Restart=on-failure
 RestartSec=5
