@@ -17,7 +17,12 @@ Print a hexdump of the `kubernetes-the-hard-way` secret stored in etcd:
 
 ```
 vagrant ssh controller-0 \
-  --command "ETCDCTL_API=3 etcdctl get /registry/secrets/default/kubernetes-the-hard-way | hexdump -C"
+  --command "sudo ETCDCTL_API=3 etcdctl get \
+  --endpoints=https://127.0.0.1:2379 \
+  --cacert=/etc/etcd/ca.pem \
+  --cert=/etc/etcd/kubernetes.pem \
+  --key=/etc/etcd/kubernetes-key.pem\
+  /registry/secrets/default/kubernetes-the-hard-way | hexdump -C"
 ```
 
 > output
@@ -27,18 +32,17 @@ vagrant ssh controller-0 \
 00000010  73 2f 64 65 66 61 75 6c  74 2f 6b 75 62 65 72 6e  |s/default/kubern|
 00000020  65 74 65 73 2d 74 68 65  2d 68 61 72 64 2d 77 61  |etes-the-hard-wa|
 00000030  79 0a 6b 38 73 3a 65 6e  63 3a 61 65 73 63 62 63  |y.k8s:enc:aescbc|
-00000040  3a 76 31 3a 6b 65 79 31  3a 53 95 c6 1b 6f 01 c0  |:v1:key1:S...o..|
-00000050  36 ab c9 9e 2f 4c 14 3a  32 5d 2f 41 56 2b 4d df  |6.../L.:2]/AV+M.|
-00000060  2c 17 d7 2a 3b d2 3e 69  a5 a6 7b 25 41 e9 48 5d  |,..*;.>i..{%A.H]|
-00000070  b1 91 0f e8 32 e4 1c 9c  ed bd 6f 1a c9 94 d4 1c  |....2.....o.....|
-00000080  07 66 09 5e a8 9a 4c 71  30 e2 fe 16 df 20 56 b4  |.f.^..Lq0.... V.|
-00000090  8e 31 c1 f3 5c 7e 4d c2  11 5b 1c 54 b2 45 a0 97  |.1..\~M..[.T.E..|
-000000a0  a3 43 fb 04 28 5a 84 be  5d 52 7b 68 07 56 bf f5  |.C..(Z..]R{h.V..|
-000000b0  52 b6 5d 35 3b f2 ae 87  d6 e3 0b f3 a3 e8 08 8c  |R.]5;...........|
-000000c0  0d db f4 6d f9 07 96 90  0d ce 5d 91 17 06 19 77  |...m......]....w|
-000000d0  3b 91 43 ca 68 53 20 4d  cb 2a 62 00 45 62 d5 a6  |;.C.hS M.*b.Eb..|
-000000e0  e3 89 9f 22 6c 0a cb 22  13 0a                    |..."l.."..|
-000000ea
+00000040  3a 76 31 3a 6b 65 79 31  3a 44 ac 6e ac 11 2f 28  |:v1:key1:D.n../(|
+00000050  02 46 3d ad 9d cd 68 be  e4 cc 63 ae 13 e4 99 e8  |.F=...h...c.....|
+00000060  6e 55 a0 fd 9d 33 7a b1  17 6b 20 19 23 dc 3e 67  |nU...3z..k .#.>g|
+00000070  c9 6c 47 fa 78 8b 4d 28  cd d1 71 25 e9 29 ec 88  |.lG.x.M(..q%.)..|
+00000080  7f c9 76 b6 31 63 6e ea  ac c5 e4 2f 32 d7 a6 94  |..v.1cn..../2...|
+00000090  3c 3d 97 29 40 5a ee e1  ef d6 b2 17 01 75 a4 a3  |<=.)@Z.......u..|
+000000a0  e2 c2 70 5b 77 1a 0b ec  71 c3 87 7a 1f 68 73 03  |..p[w...q..z.hs.|
+000000b0  67 70 5e ba 5e 65 ff 6f  0c 40 5a f9 2a bd d6 0e  |gp^.^e.o.@Z.*...|
+000000c0  44 8d 62 21 1a 30 4f 43  b8 03 69 52 c0 b7 2e 16  |D.b!.0OC..iR....|
+000000d0  14 a5 91 21 29 fa 6e 03  47 e2 06 25 45 7c 4f 8f  |...!).n.G..%E|O.|
+000000e0  6e bb 9d 3b e9 e5 2d 9e  3e 0a                    |n..;..-.>.|
 ```
 
 The etcd key should be prefixed with `k8s:enc:aescbc:v1:key1`, which indicates the `aescbc` provider was used to encrypt the data with the `key1` encryption key.
@@ -50,20 +54,20 @@ In this section you will verify the ability to create and manage [Deployments](h
 Create a deployment for the [nginx](https://nginx.org/en/) web server:
 
 ```
-kubectl run nginx --image=nginx
+kubectl create deployment nginx --image=nginx
 ```
 
 List the pod created by the `nginx` deployment:
 
 ```
-kubectl get pods -l run=nginx
+kubectl get pods -l app=nginx
 ```
 
 > output
 
 ```
-NAME                       READY     STATUS    RESTARTS   AGE
-nginx-7c87f569d-dmffs      1/1       Running   0          10m
+NAME                     READY   STATUS    RESTARTS   AGE
+nginx-554b9c67f9-vt5rn   1/1     Running   0          10s
 ```
 
 ### Port Forwarding
@@ -73,7 +77,7 @@ In this section you will verify the ability to access applications remotely usin
 Retrieve the full name of the `nginx` pod:
 
 ```
-POD_NAME=$(kubectl get pods -l run=nginx -o jsonpath="{.items[0].metadata.name}")
+POD_NAME=$(kubectl get pods -l app=nginx -o jsonpath="{.items[0].metadata.name}")
 ```
 
 Forward port `8080` on your local machine to port `80` of the `nginx` pod:
@@ -86,6 +90,7 @@ kubectl port-forward $POD_NAME 8080:80
 
 ```
 Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
 ```
 
 In a new terminal make an HTTP request using the forwarding address:
@@ -98,13 +103,13 @@ curl --head http://127.0.0.1:8080
 
 ```
 HTTP/1.1 200 OK
-Server: nginx/1.13.5
-Date: Tue, 10 Oct 2017 02:45:29 GMT
+Server: nginx/1.17.3
+Date: Sat, 14 Sep 2019 21:10:11 GMT
 Content-Type: text/html
 Content-Length: 612
-Last-Modified: Tue, 08 Aug 2017 15:25:00 GMT
+Last-Modified: Tue, 13 Aug 2019 08:50:00 GMT
 Connection: keep-alive
-ETag: "5989d7cc-264"
+ETag: "5d5279b8-264"
 Accept-Ranges: bytes
 ```
 
@@ -112,6 +117,7 @@ Switch back to the previous terminal and stop the port forwarding to the `nginx`
 
 ```
 Forwarding from 127.0.0.1:8080 -> 80
+Forwarding from [::1]:8080 -> 80
 Handling connection for 8080
 ^C
 ```
@@ -129,7 +135,7 @@ kubectl logs $POD_NAME
 > output
 
 ```
-127.0.0.1 - - [10/Oct/2017:02:45:29 +0000] "HEAD / HTTP/1.1" 200 0 "-" "curl/7.54.0" "-"
+127.0.0.1 - - [14/Sep/2019:21:10:11 +0000] "HEAD / HTTP/1.1" 200 0 "-" "curl/7.52.1" "-"
 ```
 
 ### Exec
@@ -145,7 +151,7 @@ kubectl exec -ti $POD_NAME -- nginx -v
 > output
 
 ```
-nginx version: nginx/1.13.5
+nginx version: nginx/1.17.3
 ```
 
 ## Services
@@ -167,10 +173,19 @@ NODE_PORT=$(kubectl get svc nginx \
   --output=jsonpath='{range .spec.ports[0]}{.nodePort}')
 ```
 
+Create a firewall rule that allows remote access to the `nginx` node port:
+
+```
+gcloud compute firewall-rules create kubernetes-the-hard-way-allow-nginx-service \
+  --allow=tcp:${NODE_PORT} \
+  --network kubernetes-the-hard-way
+```
+
 Retrieve the external IP address of a worker instance:
 
 ```
-EXTERNAL_IP=$(vagrant ssh worker-1 -- "ip -4 --oneline addr | grep -v secondary | grep -oP '(192\.168\.100\.[0-9]{1,3})(?=/)'")
+EXTERNAL_IP=$(gcloud compute instances describe worker-0 \
+  --format 'value(networkInterfaces[0].accessConfigs[0].natIP)')
 ```
 
 Make an HTTP request using the external IP address and the `nginx` node port:
@@ -183,13 +198,13 @@ curl -I http://${EXTERNAL_IP}:${NODE_PORT}
 
 ```
 HTTP/1.1 200 OK
-Server: nginx/1.13.5
-Date: Tue, 10 Oct 2017 02:49:19 GMT
+Server: nginx/1.17.3
+Date: Sat, 14 Sep 2019 21:12:35 GMT
 Content-Type: text/html
 Content-Length: 612
-Last-Modified: Tue, 08 Aug 2017 15:25:00 GMT
+Last-Modified: Tue, 13 Aug 2019 08:50:00 GMT
 Connection: keep-alive
-ETag: "5989d7cc-264"
+ETag: "5d5279b8-264"
 Accept-Ranges: bytes
 ```
 
