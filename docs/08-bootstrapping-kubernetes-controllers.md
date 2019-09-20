@@ -121,7 +121,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 [Service]
 ExecStart=/usr/local/bin/kube-controller-manager \\
   --address=0.0.0.0 \\
-  --allocate-node-cidrs=true \\  
+  --allocate-node-cidrs=true \\
   --cluster-cidr=10.200.0.0/16 \\
   --cluster-name=kubernetes \\
   --cluster-signing-cert-file=/var/lib/kubernetes/ca.pem \\
@@ -179,7 +179,7 @@ Documentation=https://github.com/kubernetes/kubernetes
 ExecStart=/usr/local/bin/kube-scheduler \\
   --config=/etc/kubernetes/config/kube-scheduler.yaml \\
   --leader-elect=true \\
-  --master=http://127.0.0.1:8080 \\  
+  --master=http://127.0.0.1:8080 \\
   --v=2
 Restart=on-failure
 RestartSec=5
