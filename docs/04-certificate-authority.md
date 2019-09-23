@@ -201,28 +201,6 @@ kube-controller-manager.pem
 
 ### The kube-proxy Client Certificate
 
-Generate the `kube-proxy` client certificate and private key:
-
-```
-cat > kube-proxy-csr.json <<EOF
-{
-  "CN": "system:kube-proxy",
-  "key": {
-    "algo": "rsa",
-    "size": 2048
-  },
-  "names": [
-    {
-      "C": "US",
-      "L": "Portland",
-      "O": "system:node-proxier",
-      "OU": "Kubernetes The Hard Way",
-      "ST": "Oregon"
-    }
-  ]
-}
-EOF
-```
 
 Generate the `kube-proxy` client certificate and private key:
 
