@@ -203,8 +203,10 @@ EOF
 
 ### Verification
 
+Login into one of the controller nodes:
+
 ```
-kubectl get componentstatuses --kubeconfig admin.kubeconfig
+kubectl get componentstatuses --kubeconfig /vagrant/admin.kubeconfig
 ```
 
 ```
